@@ -1,9 +1,57 @@
 ---
-import BaseLayout from '@/layouts/BaseLayout.astro';
-const { frontmatter } = Astro.props;
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+import TOC from "@/components/TOC.astro";
+
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  image,
+  link,
+  github,
+  category,
+  headings,
+} = Astro.props;
 ---
-<BaseLayout url={frontmatter.url}>
-  <h1>{frontmatter.title}</h1>
-  <h2>Post author: {frontmatter.author}</h2>
-  <slot />
+
+<BaseLayout heroImage="/blog-placeholder-about.jpg">
+  <nav class="article-toc">
+    <h3>Table of Content</h3>
+    <TOC headings={headings} />
+  </nav>
+
+  <article class="article-content">
+    <slot />
+  </article>
+
+  <script>
+    console.log("PostLayout: addIntersectionObserver");
+
+    const observer = new IntersectionObserver((sections) => {
+      console.log("sections=", sections);
+      sections.forEach((section) => {
+        const heading = section.target.querySelector("h2, h3, h4, h5");
+        if (!heading) return;
+        const id = heading.getAttribute("id");
+
+        // Get the link to this section's heading
+        const link = document.querySelector(`nav.toc li a[href="#${id}"]`);
+        if (!link) return;
+
+        // Add/remove the .active class based on whether the section is visible
+        const addRemove = section.intersectionRatio > 0 ? "add" : "remove";
+
+        console.log("PostLayout/addIntersectionObserver: addRemove=", addRemove, " link=", link);
+
+        link.classList[addRemove]("active");
+      });
+    });
+
+    document.querySelectorAll(".article-content section").forEach((section) => {
+      console.log("PostLayout/addIntersectionObserver: section=", section);
+      observer.observe(section);
+    });
+  </script>
 </BaseLayout>

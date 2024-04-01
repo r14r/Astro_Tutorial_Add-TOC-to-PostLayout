@@ -5,9 +5,11 @@ import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
 import FormattedDate from '@/components/FormattedDate.astro';
 
-type Props = CollectionEntry<'blog'>['data'];
+import { Debug } from 'astro:components';
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+// type Props = CollectionEntry<'blog'>['data'];
+
+const { title, description , pubDate, updatedDate, heroImage, headings } = Astro.props;
 ---
 
 <html lang="en">
@@ -29,9 +31,9 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 				box-shadow: var(--box-shadow);
 			}
 			.prose {
-				width: 720px;
+				width: 1200px;
 				max-width: calc(100% - 2em);
-				margin: auto;
+				margin: 0 50px 0 50px;
 				padding: 1em;
 				color: rgb(var(--gray-dark));
 			}
@@ -76,10 +78,12 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 						<h1>{title}</h1>
 						<hr />
 					</div>
+
 					<slot />
 				</div>
 			</article>
 		</main>
+
 		<Footer />
 	</body>
 </html>

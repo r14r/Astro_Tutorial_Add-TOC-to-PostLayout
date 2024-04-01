@@ -1,0 +1,24 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { getCollection } from "astro:content";
+
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+type Props = CollectionEntry<"blog">["data"];
+
+// const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+
+const posts = (await getCollection("blog")).sort(
+  (a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf()
+);
+---
+
+<!-- Blog Layout  -->
+
+<BaseLayout
+	title="Blog"
+	description="Blog Posts"
+	heroImage="/blog-placeholder-about.jpg"
+>
+  <slot />
+</BaseLayout>
